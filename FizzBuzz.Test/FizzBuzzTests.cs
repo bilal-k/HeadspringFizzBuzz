@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FizzBuzz.Core;
@@ -34,6 +35,44 @@ namespace FizzBuzz.Test
         {
             var output = FizzBuzz.Core.FizzBuzz.Get(4, 4);
             Assert.AreEqual("4", output.First());
+        }
+
+        [TestMethod]
+        public void Empty_DivisorTable_Prints_Number()
+        {
+            var output = FizzBuzz.Core.FizzBuzz.Get(5, 5, new Dictionary<int, string>());
+            Assert.AreEqual("5", output.First());
+        }
+
+        [TestMethod]
+        public void DivisorTable_Prints_Custom_Description()
+        {
+            var output = FizzBuzz.Core.FizzBuzz.Get(3, 3, new Dictionary<int, string> {{3, "custom"}});
+            Assert.AreEqual("custom", output.First());
+        }
+
+        [TestMethod]
+        public void DivisorTable_Prints_Description_Based_On_Largest_Divisor_Match()
+        {
+            var output = FizzBuzz.Core.FizzBuzz.Get(30, 30,
+                                                    new Dictionary<int, string> {{10, "custom10"}, {15, "custom15"}});
+            Assert.AreEqual("custom15", output.First());
+        }
+
+        [TestMethod]
+        public void DivisorTable_With_1_Always_Prints_Description()
+        {
+            var output = FizzBuzz.Core.FizzBuzz.Get(1, 100, new Dictionary<int, string> {{1, "buzzer"}});
+
+            Assert.AreEqual(100, output.Count());
+            Assert.IsTrue(output.All(d => (d == "buzzer")));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Null_DivisorTable_Throws_ArgumentNullException()
+        {
+            FizzBuzz.Core.FizzBuzz.Get(1, 100, null).ToList();
         }
 
         [TestMethod]

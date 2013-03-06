@@ -10,24 +10,54 @@ namespace FizzBuzz.Core
     {
         public static void Print(int numbersFrom, int numbersTo)
         {
-            foreach (string line in Get(numbersFrom, numbersTo))
+            Print(numbersFrom, numbersTo, new Dictionary<int, string>
+                                              {
+                                                  { 3, "fizz" },
+                                                  { 5, "buzz" },
+                                                  { 15, "fizzbuzz" }
+                                              });
+        }
+
+        public static void Print(int numbersFrom, int numbersTo, Dictionary<int, string> divisorTable)
+        {
+            foreach (string line in Get(numbersFrom, numbersTo, divisorTable))
                 Console.WriteLine(line);
         }
 
         public static IEnumerable<string> Get(int numbersFrom, int numbersTo)
         {
+            return Get(numbersFrom, numbersTo, new Dictionary<int, string>
+                                                {
+                                                  { 3, "fizz" },
+                                                  { 5, "buzz" },
+                                                  { 15, "fizzbuzz" }
+                                                });
+        }
+
+        public static IEnumerable<string> Get(int numbersFrom, int numbersTo, Dictionary<int, string> divisorTable)
+        {
             if (numbersFrom > numbersTo)
-                throw new ArgumentOutOfRangeException("numbersFrom should be less than or equal to numbersTo.");
+                throw new ArgumentOutOfRangeException("numbersFrom", "numbersFrom should be less than or equal to numbersTo");
+            if (divisorTable == null)
+                throw new ArgumentNullException("divisorTable");
+
+            var divisors = divisorTable.Keys.OrderByDescending(d => d);
 
             for (int i = numbersFrom; i <= numbersTo; i++)
             {
-                if (i % 15 == 0)
-                    yield return "fizzbuzz";
-                else if (i % 3 == 0)
-                    yield return "fizz";
-                else if (i % 5 == 0)
-                    yield return "buzz";
-                else
+                bool foundDivisor = false;
+
+                foreach (int divisor in divisors)
+                {
+                    if (i % divisor == 0)
+                    {
+                        yield return divisorTable[divisor];
+                        foundDivisor = true;
+                        break;
+                    }
+                }
+                
+                if (!foundDivisor)
                     yield return i.ToString();
             }
         }
