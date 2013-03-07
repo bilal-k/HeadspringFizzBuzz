@@ -52,11 +52,11 @@ namespace FizzBuzz.Test
         }
 
         [TestMethod]
-        public void DivisorTable_Prints_Description_Based_On_Largest_Divisor_Match()
+        public void DivisorTable_Prints_Description_Based_On_Concatenated_Divisor_Matches()
         {
             var output = FizzBuzz.Core.FizzBuzz.Get(30, 30,
                                                     new Dictionary<int, string> {{10, "custom10"}, {15, "custom15"}});
-            Assert.AreEqual("custom15", output.First());
+            Assert.AreEqual("custom10custom15", output.First());
         }
 
         [TestMethod]

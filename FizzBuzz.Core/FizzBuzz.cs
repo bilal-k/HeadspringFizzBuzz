@@ -13,8 +13,7 @@ namespace FizzBuzz.Core
             Print(numbersFrom, numbersTo, new Dictionary<int, string>
                                               {
                                                   { 3, "fizz" },
-                                                  { 5, "buzz" },
-                                                  { 15, "fizzbuzz" }
+                                                  { 5, "buzz" }
                                               });
         }
 
@@ -29,8 +28,7 @@ namespace FizzBuzz.Core
             return Get(numbersFrom, numbersTo, new Dictionary<int, string>
                                                 {
                                                   { 3, "fizz" },
-                                                  { 5, "buzz" },
-                                                  { 15, "fizzbuzz" }
+                                                  { 5, "buzz" }
                                                 });
         }
 
@@ -41,23 +39,23 @@ namespace FizzBuzz.Core
             if (divisorTable == null)
                 throw new ArgumentNullException("divisorTable");
 
-            var divisors = divisorTable.Keys.OrderByDescending(d => d);
+            var divisors = divisorTable.Keys.OrderBy(d => d);
 
             for (int i = numbersFrom; i <= numbersTo; i++)
             {
-                bool foundDivisor = false;
+                string description = "";
 
                 foreach (int divisor in divisors)
                 {
                     if (i % divisor == 0)
                     {
-                        yield return divisorTable[divisor];
-                        foundDivisor = true;
-                        break;
+                        description += divisorTable[divisor];
                     }
                 }
-                
-                if (!foundDivisor)
+
+                if (!String.IsNullOrEmpty(description))
+                    yield return description;
+                else
                     yield return i.ToString();
             }
         }
